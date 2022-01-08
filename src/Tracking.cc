@@ -684,7 +684,7 @@ void Tracking::Track()
         double cam_pos_time;
         s_1_1 = clock();
         // Get initial estimate using P3P plus RanSac
-        cv::Mat iniTcw = GetInitModelCam(TemperalMatch,TemperalMatch_subset);
+        cv::Mat iniTcw = GetInitModelCam(TemperalMatch,TemperalMatch_subset);//临时的点集恢复出位姿
         e_1_1 = clock();
 
 
