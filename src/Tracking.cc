@@ -39,7 +39,7 @@ using namespace std;
 bool SortPairInt(const pair<int,int> &a,
               const pair<int,int> &b)
 {
-    return (a.second > b.second);
+    return (a.second > b.second);//降序进行排列
 }
 
 namespace VDO_SLAM
@@ -142,13 +142,13 @@ Tracking::Tracking(System *pSys, Map *pMap, const string &strSettingPath, const 
         cout << "- depth map factor: " << mDepthMapFactor << endl;
     }
 
-    nMaxTrackPointBG = fSettings["MaxTrackPointBG"];
+    nMaxTrackPointBG = fSettings["MaxTrackPointBG"];//最大跟踪速度
     nMaxTrackPointOBJ = fSettings["MaxTrackPointOBJ"];
     cout << "- max tracking points: " << "(1) background: " << nMaxTrackPointBG << " (2) object: " << nMaxTrackPointOBJ << endl;
 
     fSFMgThres = fSettings["SFMgThres"];
     fSFDsThres = fSettings["SFDsThres"];
-    cout << "- scene flow paras: " << "(1) magnitude: " << fSFMgThres << " (2) percentage: " << fSFDsThres << endl;
+    cout << "- scene flow paras: " << "(1) magnitude: " << fSFMgThres << " (2) percentage: " << fSFDsThres << endl;//光流结果
 
     nWINDOW_SIZE = fSettings["WINDOW_SIZE"];
     nOVERLAP_SIZE = fSettings["OVERLAP_SIZE"];
@@ -203,7 +203,7 @@ cv::Mat Tracking::GrabImageRGBD(const cv::Mat &imRGB, cv::Mat &imD, const cv::Ma
         }
     }
 
-    cv::Mat imDepth = imD;
+    cv::Mat imDepth = imD;//剔除深度图中不靠谱的点
 
     // Transfer color image to grey image
     if(mImGray.channels()==3)
@@ -224,7 +224,7 @@ cv::Mat Tracking::GrabImageRGBD(const cv::Mat &imRGB, cv::Mat &imD, const cv::Ma
     // Save map in the tracking head (new added Nov 14 2019)
     mDepthMap = imD;
     mFlowMap = imFlow;
-    mSegMap = maskSEM;
+    mSegMap = maskSEM;//深度图、光流图和分割图
 
     // Initialize timing vector (Output)
     all_timing.resize(5,0);
@@ -246,14 +246,14 @@ cv::Mat Tracking::GrabImageRGBD(const cv::Mat &imRGB, cv::Mat &imD, const cv::Ma
     mCurrentFrame = Frame(mImGray,imDepth,imFlow,maskSEM,timestamp,mpORBextractorLeft,mK,mDistCoef,mbf,mThDepth,mThDepthObj,nUseSampleFea);
 
     // ---------------------------------------------------------------------------------------
-    // +++++++++++++++++++++++++ For sampled features ++++++++++++++++++++++++++++++++++++++++
+    // +++++++++++++++++++++++++ For sampled features ++++++++++++++++++++++++++++++++++++++++sampled features是什么意思
     // ---------------------------------------------------------------------------------------
 
     if(mState!=NO_IMAGES_YET)
     {
         cout << "Update Current Frame From Last....." << endl;
 
-        mCurrentFrame.mvStatKeys = mLastFrame.mvCorres;
+        mCurrentFrame.mvStatKeys = mLastFrame.mvCorres;//这里是静止的点
         mCurrentFrame.N_s = mCurrentFrame.mvStatKeys.size();
 
         // assign the depth value to each keypoint
